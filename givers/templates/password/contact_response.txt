@@ -1,0 +1,10 @@
+{% autoescape off %}
+Hello,
+
+We received your {{ subject }} message and be sure we will look through and get back to you as soon as possible.
+Thanks for contacting us.
+
+Sincerely,
+The Dashme Team
+
+{% endautoescape %}

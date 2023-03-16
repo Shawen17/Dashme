@@ -1,0 +1,56 @@
+{% extends 'givers/base.html' %}
+
+
+
+{% block content %}
+{% include 'givers/message.html' %}
+<div class="d-flex justify-content-center" style="text-align: center;padding-top: 10px;">
+    <label class="payment">
+    <!-- <div class="col-12 mb-4"> -->
+        <h6>Payment Breakdown in NGN</h6>
+        <hr>
+        <h6>Logistics: {{ logistics }}</h6>
+        <h6>Service fee: {{ service_charge }}</h6>
+        <h6>Paystack charge: {{ charge }}</h6>
+        
+        <hr>
+        <h6>Total: {{ transaction.amount }}</h6>
+        
+        <form class="d-flex justify-content-center">
+            
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+            
+            <button class="btn btn-large btn-primary" onclick="payWithPayStack()"  type="button" id="django-paystack-button">Make payment </button> 
+            
+        </form>
+    </label>
+    <!-- </div>  -->
+</div>
+<script>
+    function payWithPayStack(){
+        let currency = "NGN";
+        let plan =  "";
+        let ref ="{{ transaction.ref }}";
+        let obj = {
+            key: "{{ paystack_public_key }}",
+            email: "{{ transaction.email }}",
+            amount: "{{ transaction.amount_value }}",
+            ref : ref,
+            callback: function(response){
+                window.location.href= "{% url 'verify-payment' transaction.ref %}"
+            }
+        }
+
+        if (Boolean(currency)){
+            obj.currency = currency.toUpperCase()
+        }
+        var handler = PaystackPop.setup(obj);
+        handler.openIframe();
+
+
+    }
+</script>
+
+
+
+{% endblock %}

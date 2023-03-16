@@ -1,0 +1,61 @@
+{% extends 'givers/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'givers/message.html' %}
+<div class="account" >
+<div class="container">
+    <h1 style="text-align: center;font-weight: bolder;padding-top: 20px;">Register details</h1>
+    <br>
+
+
+    <br>
+    <div class="row d-flex justify-content-center">
+    <form class="form-width" style="max-width: 70rem;border:slategray 2px solid;padding: 50px;border-radius: 10px;background-color: white;"  , method ='POST',action="{% url 'signupuser' %}">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-6 col-md-6 mb-0">
+                {{ form.firstname|as_crispy_field }}
+            </div>
+            <div class="form-group col-6 col-md-6 mb-0">
+                {{ form.lastname|as_crispy_field }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-6 col-md-6 mb-0">
+                {{ form.username|as_crispy_field }}
+            </div>
+            <div class="form-group col-6 col-md-6 mb-0">
+                {{ form.email|as_crispy_field }}
+
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-6 col-md-6 mb-0">
+                {{ form.phone_number|as_crispy_field }}
+
+            </div>
+            <div class="form-group col-6 col-md-6 mb-0">
+                {{ form.state|as_crispy_field }}
+            </div>
+        </div>
+        {{ form.password1|as_crispy_field }}
+        {{ form.password2|as_crispy_field }}
+        <p>*Password must be at least 8 letters long</p>
+        <p>*password must contain uppercase character</p>
+        <p>*must not be too similar to username</p>
+        <button class="button button1"   type='submit' style='background-color:aqua;'>Sign Up</button>
+    </form>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

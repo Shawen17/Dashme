@@ -1,0 +1,61 @@
+
+  {% load crispy_forms_tags %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+  <style>
+
+    #deliveryForm{
+      padding-top: 20px
+    }
+
+    .seldemo {
+      background: whitesmoke;
+      border-radius: 15px;
+      padding:50px;
+      font-size:20px;
+      color:black;
+      max-width: 25rem
+    }
+    .selcls {
+      margin-bottom: 10px;
+      padding: 3px;
+      border-radius: 10px;
+      border: solid 1px #517B97;
+      outline: 0;
+      background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF));
+      background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px);
+      box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+      -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+      -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+      width:150px;
+      }
+  </style>
+
+<div id="deliveryForm">
+  <div class="row d-flex justify-content-center">
+    <h1 style="text-align: center;font-weight: bolder;padding-top: 20px;font-size: 18px;">Provide Delivery Information</h1>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div  class="seldemo">
+    <form  method ='POST' action="{% url 'checkout' %}">
+
+
+          <input type="number" placeholder="contact number" name="contact" style="width: 180px;margin-bottom: 5px;border-radius: 6px;" required>
+          <select class="selcls" data-live-search="true" name="city" style="width: 180px;" data-style="btn-success" required>
+            <option selected disabled="true">--select city--</option>
+            {% for centre in destination %}
+            <option value="{{ centre.city }}" name="g">{{ centre.city|title }}</option>
+            {% endfor %}
+          </select>
+          <textarea  placeholder="delivery address" name="address" rows="4" cols="30" required>
+
+          </textarea>
+
+        <button class="btn btn-success btn-2 mt-4" type='submit'>Submit</button>
+        {% csrf_token %}
+    </form>
+  </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

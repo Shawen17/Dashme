@@ -1,0 +1,270 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<style>
+    html,body{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;}
+    #glow2 {
+          font-weight: 700;
+          text-align: center;
+          font-size: 30px;
+          font-family: Hack, sans-serif;
+          text-transform: uppercase;
+          background: linear-gradient(90deg, #6cc0f7,white, #6cc0f7);
+          letter-spacing: 5px;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-repeat: no-repeat;
+          background-size: 80%;
+          animation: shine 5s linear infinite;
+          position: relative;
+        }
+
+        @keyframes shine {
+          0% {
+            background-position-x: -500%;
+          }
+          100% {
+            background-position-x: 500%;
+          }
+        }
+    .blink {
+  animation: blink 3s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: scale(2);
+  }
+  51% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+#scroll-text {
+  /* animation properties */
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+
+  -moz-animation: my-animation 10s linear infinite;
+  -webkit-animation: my-animation 10s linear infinite;
+  animation: my-animation 10s linear infinite;
+}
+
+/* for Firefox */
+@-moz-keyframes my-animation {
+  from { -moz-transform: translateX(100%); }
+  to { -moz-transform: translateX(-100%); }
+}
+
+/* for Chrome */
+@-webkit-keyframes my-animation {
+  from { -webkit-transform: translateX(100%); }
+  to { -webkit-transform: translateX(-100%); }
+}
+
+@keyframes my-animation {
+  from {
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  to {
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+
+
+
+</style>
+
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta  name="viewport" content="width=device-width,  initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>-->
+    <link rel="stylesheet" href="{% static 'givers/css/base.css' %}"/>
+    <link rel="icon" type="image/png"  href="{% static 'givers/img/G.png' %}"/>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1308985375007946"
+     crossorigin="anonymous"></script>
+    <title>Dashme</title>
+</head>
+<body>
+
+<div style='position:relative;margin-bottom:70px'>
+    <nav class="navbar navbar-expand-md navbar-light" style='position:fixed;z-index:9;top:0;right:0;left:0;background-color:whitesmoke'>
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'givers/img/G.png' %}" width="30" height="30" class="d-inline-block align-top">
+               <span style="color: teal;font-weight: 500;">Dashme</span>
+            </a>
+            <a class="navbar-brand" href="{% url 'blog:all_blogs' %}" target="_blank"><span style="color: rgb(16, 196, 202);">Blog</span></a>
+            <button  style="color:teal" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div style="display: flex;align-items: center;justify-content: center;">
+              <button type="button" style="border: none;background-color: transparent;"><a href="{% url 'user_account' %}" ><i  class="fal fa-shopping-cart"></i><span id="cart" class="badge badge-info">{% if cartItem %}{{cartItem}}{% endif %}</span></a></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item {{ creategift }}">
+                    <a style="color: teal;" class="nav-link" href="{% url 'creategift' %}">Offer gift</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{% url 'giveaway' %}" style="color: teal;" class="nav-link">Gifts</a>
+                  </li>
+                  {% if user.is_authenticated %}
+
+                    <li class="nav-item {{ user_account }}">
+                        <a  style="color: teal;" class="nav-link" href="{% url 'user_account' %}">dashboard</a>
+                    </li>
+
+                  {% endif %}
+                </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item {{ edit_profile }}">
+                        <a  style="color: teal;" class='nav-link' href="{% url 'account_update' %}" >Update Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                            <a href="{% url 'logoutuser' %}"  style="color: teal;"  class="nav-link">Logout</a>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a style="color: teal;" class="nav-link" href="{% url 'signupuser' %}">SignUp</a>
+                    </li>
+                    <li class="nav-item" style="color:white;">
+                        <a style="color: teal;" class="nav-link" href="{% url 'loginuser' %}">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+</div>
+
+        {% block content %}{% endblock %}
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!-- reCAPTCHA API -->
+<script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+    var form = document.getElementById('redeem-form');
+    var btn_appear = document.getElementById('btn-appear');
+    var btn_disappear =document.getElementById('btn-disappear');
+    var someval = document.getElementsByClassName('testvalues');
+    const newfile = new ActiveXObject("Scripting.FileSystemObject");
+    btn_appear.onclick= function(){
+        form.style.display = 'block';
+    }
+    btn_disappear.onclick = function(){
+        form.style.display = 'none';
+    }
+    window.onclick = function(event){
+        if (event.target == form){
+            form.style.display = 'none';
+        }
+    }
+</script>
+<script>
+    //global grecaptcha
+    grecaptcha.ready(function() {
+      grecaptcha.execute('{{recaptcha_site_key}}', {action: "{% url 'loginuser' %}"}).then(function(token) {
+        document.getElementById('g-recaptcha-response').value = token;
+      });
+    });
+</script>
+
+</body>
+<div  style="background-color:teal">
+
+    <div class="row" style="background-color: teal;padding-top: 20px;">
+        <div class="col-5 col-md-5">
+
+                <ul >
+                    <li class="foot-list" style="flex: left;"><b>Our Services</b></li>
+
+                    <li class="foot-list" style="flex: left;">
+                        <a class='a'  href="{% url 'contact' %}">Contact us</a>
+                    </li>
+                </ul>
+        </div>
+        <div class="col-2 col-md-2"></div>
+
+
+            <div class="col-5 col-md-5">
+                 <ul >
+                    <li class="foot-list" style="flex: right;">
+                        <a class='a' href="{% url 'policy' %}">policy</a>
+                    </li>
+                    <li class="foot-list" style="flex: right;">
+                        <a class='a' href="{% url 'about' %}">about us</a>
+                    </li>
+                    <li class="foot-list" style="flex: right;">
+                        <a class='a' href="{% url 'operation' %}">how it works</a>
+                    </li>
+                </ul>
+            </div>
+        <div class="col-md-12 text-center">
+
+
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/giveawaynow234"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <p style="font-size: 13px;color:black;font-weight: 100;font-family:monospace;">Copyright 2023 Dashme</p>
+        </div>
+
+
+    </div>
+</div>
+
+</html>

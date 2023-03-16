@@ -1,0 +1,283 @@
+{%  extends 'givers/base.html' %}
+
+
+{% load static %}
+
+
+{% block content %}
+{% include 'givers/message.html' %}
+<!--<div class="home-container">-->
+
+    <div class='wrapper'>
+
+        <div class='slide pic' id='pic4'>
+        <div class="image-container" >
+            <img class="img" src="{% static  'givers/img/freestock.jpg' %}"/>
+        </div>
+        <div class="info-container">
+                <h1 class="title">HOME OF AMAZING FREE ITEMS</h1>
+                <p class="desc">ONE COMMUNITY, THOUSANDS OF BRANDS, GIVE OUT THOSE ITEMS TO FREE UP SPACE AND MAKE SOMEONE SMILE</p>
+
+            </div>
+        </div>
+        <div class='slide pic' id='pic3'>
+            <div class="image-container">
+                <img class="img"  src="{% static  'givers/img/depositphotos.jpg' %}"/>
+            </div>
+            <div  class="info-container" >
+                <h1 class="title">FREE UP SPACE</h1>
+                <p class="desc">YOU WANT TO GIVE OUT ITEMS IN GOOD CONDITION YOU NO LONGER USE? WE ARE HERE TO HELP</p>
+
+            </div>
+        </div>
+        <div class='slide pic' id='pic2'>
+            <div class="image-container">
+                <img class="img" src="{% static  'givers/img/homeimage3.jpg' %}"/>
+            </div>
+            <div  class="info-container">
+                <h1 class="title">SLAYING ON A BUDGET</h1>
+                <p class="desc">PICK UP CLOTHES,BAGS,SHOES,ELECTRONICS AND ANYTHING YOU COULD THINK OF FOR FREE!!</p>
+
+            </div>
+        </div>
+        <div  class='slide pic' id='pic1'>
+            <div class="image-container">
+                <img class="img" src="{% static  'givers/img/women_top.jpg' %}"/>
+            </div>
+            <div class="info-container">
+                <h1  class="title">RELOCATING ABROAD</h1>
+                <p class="desc">WE ARE JUST A FORM AWAY FROM PICKING UP THOSE ITEMS YOU WANT TO GIVE AWAY, SO NO STRESS!  </p>
+                <button class="home-button" type="button"><a class='nav-link' href="{% url 'creategift' %}">START GIVING</a> </button>
+            </div>
+        </div>
+    </div>
+
+<!--</div>-->
+
+<div style="width:100%;padding:30px">
+        <div class="row d-flex justify-content-center"></div>
+        <div style="border-radius: 4px;padding: 4px;color:white;background: url('../../static/givers/img/excited.jpeg') no-repeat center center / cover;">
+            <h3 style ='text-align: center;font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;' class="blink">New Arrivals!</h3>
+        </div>
+        <div style="margin-bottom: 30px;">
+            <h6 style="color: teal;display: flex;">Hottest Deals<span style="margin-left: auto;"><a  href="{% url 'product_class' %}" class="link" style="color: teal;" >see all</a></span></h6>
+        </div>
+
+
+        <div style="display:flex;flex-direction:column">
+            <div class="scroll-container">
+                    {% for i in premium %}
+                    <a href="{% url 'viewgift' i.id %}">
+                        <div class="gridscroll">
+                            <div class="nw-img-con">
+                                <div class="nw-img-circle" style="margin: 8px;">
+                                    <img src="{{ i.image.url }}" height="130px" width="100px" style="border-radius: 8px;"/>
+                                </div>
+                                <p style="font-size: 15px;font-family: sans-serif;word-spacing:-1px;word-wrap: break-word;">{{ i.description }}</p>
+                                <p style="font-size: 13px;">{{ i.product_class }} | {{ i.quantity }} </p>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor  %}
+            </div>
+        </div>
+        <div class="ani-body">
+            <p class="p">Give and pickup Amazing items</p>
+        </div>
+        <div class="mt-4" style="display:flex;flex-direction:column">
+            {% if electronics %}
+            <div class="cat_home">
+                <h6><a style="color: inherit;"  href="{% url 'product_category' 'electronics' %}" >Electronics</a></h6>
+            </div>
+            <div class="scroll-container">
+
+                {% for i in electronics %}
+                <a href="{% url 'viewgift' i.id %}">
+                    <div class="gridscroll">
+                        <div class="nw-img-circle">
+                            <img src="{{ i.image.url }}" height="130px" width="100px" style="border-radius: 8px;"/>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-4" style="display:flex;flex-direction:column">
+            {% if clothes %}
+            <div class="cat_home">
+                <h6><a style="color: inherit;"  href="{% url 'product_category' 'clothes' %}" >Clothes</a></h6>
+            </div>
+            <div class="scroll-container">
+
+                {% for i in clothes %}
+                <a href="{% url 'viewgift' i.id %}">
+                    <div class="gridscroll">
+                        <div class="nw-img-circle">
+                            <img src="{{ i.image.url }}" height="130px" width="100px" style="border-radius: 8px;"/>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-4" style="display:flex;flex-direction:column">
+            {% if shoes %}
+            <div class="cat_home">
+                <h6><a style="color: inherit;"  href="{% url 'product_category' 'shoes' %}" >Footwear</a></h6>
+            </div>
+            <div class="scroll-container">
+
+                {% for i in shoes %}
+                <a href="{% url 'viewgift' i.id %}">
+                    <div class="gridscroll">
+                        <div class="nw-img-circle">
+                            <img src="{{ i.image.url }}" height="130px" width="100px" style="border-radius: 8px;"/>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-4" style="display:flex;flex-direction:column">
+            {% if corporate %}
+            <div class="cat_home">
+                <h6><a style="color: inherit;"  href="{% url 'product_category' 'corporate' %}" >Corporate wears</a></h6>
+            </div>
+            <div class="scroll-container">
+
+                {% for i in corporate %}
+                <a href="{% url 'viewgift' i.id %}">
+                    <div class="gridscroll">
+                        <div class="nw-img-circle">
+                            <img src="{{ i.image.url }}" height="130px" width="100px" style="border-radius: 8px;"/>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-4" style="display:flex;flex-direction:column">
+            {% if natives %}
+            <div class="cat_home">
+                <h6><a style="color: inherit;"  href="{% url 'product_category' 'natives' %}" >Native wears</a></h6>
+            </div>
+            <div class="scroll-container">
+
+                {% for i in natives %}
+                <a href="{% url 'viewgift' i.id %}">
+                    <div class="gridscroll">
+                        <div class="nw-img-circle">
+                            <img src="{{ i.image.url }}" height="130px" width="100px" style="border-radius: 8px;"/>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items: center;justify-content: space-between;">
+            <div style="background-color: whitesmoke;height: 150px;flex:30%;display: flex;align-items: center;justify-content: center;padding:5px 15px;margin:10px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+                <div style="display:flex;background-color: white;flex: 50%;align-items: center;justify-content: center;height: 130px;">
+                    <img src="{% static  'givers/img/slay.jpg' %}" height="90px" width="90px" >
+                </div>
+                <div style="display: flex;flex-direction: column;flex: 50%;margin: 5px;">
+                    <h5>Slay on budget</h5>
+                    <a class="nav-link" style="font-size: 13px;font-weight: 500;" href="{% url 'giveaway' %}" >Shop now <span style="border-radius: 50%;color: white;background-color: teal;"> > </span></a>
+                </div>
+            </div>
+            <div style="background-color: whitesmoke;height: 150px;flex:30%;display: flex;align-items: center;justify-content: center;padding:5px 15px;margin:10px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+                <div style="display:flex;background-color: white;flex: 50%;align-items: center;justify-content: center;height: 130px">
+                    <img src="{% static  'givers/img/happy.jpg' %}" height="90px" width="90px" >
+                </div>
+                <div style="display: flex;flex-direction: column;flex: 50%;margin: 5px;">
+                    <h5>Make someone smile</h5>
+                    <a class="nav-link" style="font-size: 13px;font-weight: 500;"  href="{% url 'creategift' %}" >Give items <span style="border-radius: 50%;color: white;background-color: teal;"> > </span></a>
+                </div>
+            </div>
+            <div style="background-color: whitesmoke;height: 150px;flex:30%;display: flex;align-items: center;justify-content: center;padding:5px 15px;margin:10px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+                <div style="display:flex;background-color: white;flex: 50%;align-items: center;justify-content: center;height: 130px">
+                    <img src="{% static  'givers/img/closet.jpg' %}" height="90px" width="90px" >
+                </div>
+                <div style="display: flex;flex-direction: column;flex: 50%;margin: 5px;">
+                    <h5>Free up space</h5>
+                    <a class="nav-link" style="font-size: 13px;font-weight: 500;"  href="{% url 'creategift' %}" >Give items <span style="border-radius: 50%;color: white;background-color: teal;"> > </span></a>
+                </div>
+            </div>
+
+        </div>
+        <div id="projects">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="widget-title" style="padding-left: 5px;">SAMPLE OF THINGS TO GIVE</h4>
+                    <p style="padding-left: 7px;">Don't underestimate what that thing you no longer value will mean to somebody out there, so kindly GIVE.</p>
+                </div>
+            </div>
+            <div class="row projects-holder">
+                <div class="col-12 col-md-4">
+                    <div class="project-item">
+                        <img src="{% static 'givers/img/women_top.jpg'  %}" alt="" height="200" width="100%">
+                        <div class="project-hover">
+                            <div class="inside">
+                                <h5><a href="{% url 'giveaway' %}">Slay dresses</a></h5>
+                                <p style="word-wrap: break-word;">Put a smile on a face as they wear your dress</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="project-item">
+                        <img src="{% static 'givers/img/grocery.jpg' %}" alt="" height="200" width="100%">
+                        <div class="project-hover">
+                            <div class="inside">
+                                <h5><a href="{% url 'giveaway' %}">Food Items</a></h5>
+                                <p style="word-wrap: break-word;">Bulk sealed/Canned food items about to expire? Feed people with them</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="project-item">
+                        <img src="{% static 'givers/img/appliances.jpeg'  %}" alt="" height="200" width="100%">
+                        <div class="project-hover">
+                            <div class="inside">
+                                <h5><a href="{% url 'giveaway' %}">Household appliances</a></h5>
+                                <p style="word-wrap: break-word;">All range of cooking and kitchen appliances to make life better</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div style="display: flex;flex-wrap: wrap;margin-top: 30px;">
+            <div style="flex:1; background-color:lightsalmon;height: 270px;">
+                <p style="text-align: center;" class="desc">VISIT REGULARLY AND BE THE FIRST TO PICKUP ITEMS FROM YOUR FAVOURITE CELEB'S COLLECTION
+
+                </p>
+            </div>
+            <div style="flex:1; background-color:peru;height: 270px;">
+                <P style="text-align: center;" class="desc">COMING SOON!!! SUBSCRIPTION MODEL WHERE YOU WILL HAVE THE EXCLUSIVE RIGHT OF PICKING ANY NUMBER OF ITEMS YOUR
+                    PACKAGE OFFERS AT ONCE.
+                </P>
+                <button class="home-button" type="button"><a class='nav-link' href="">MORE</a> </button>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

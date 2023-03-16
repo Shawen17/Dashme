@@ -1,0 +1,21 @@
+{% autoescape off %}
+
+Hello,
+
+This is the breakdown for the items you have picked for delivery;
+Invoice Reference {{ ref }}
+
+Giveaway Items:
+{{ ordered_giveaway }}
+
+logistics:{{ logistics }}
+service charge:{{ service_charge }}
+VAT:{{ vat }}
+
+which amounts to NGN{{ amount }} in total.
+
+
+The Dashme Team
+
+
+{% endautoescape %}

@@ -1,0 +1,36 @@
+{% extends 'givers/base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block content %}
+{% include 'givers/message.html' %}
+
+
+<div class="tdstyle">
+<h3 style="text-align: center;text-decoration: underline teal;">Contact us</h3>
+<p style="text-align: center;">kindly let us know how we can be of help</p>
+<br>
+<br>
+<div class="row d-flex justify-content-center" style="padding-top: 30px;">
+<form style="max-width: 70em;border:slategray 2px solid;padding: 50px;border-radius: 15px;background-color: white;"  method ='POST' action="{% url 'contact' %}">
+    {% csrf_token %}
+    {{ form.email|as_crispy_field }}
+    <div class="form-row">
+        <div class="form-group col-6 col-md-6 mb-0">
+            {{ form.subject|as_crispy_field }}
+        </div>
+        <div class="form-group col-6 col-md-6 mb-0">
+            {{ form.ticket|as_crispy_field }}
+        </div>
+    </div>
+    {{ form.body|as_crispy_field }}
+    <button class="button button1" type='submit' style='background-color:aqua;'>Submit</button>
+</form>
+</div>
+</div>
+
+
+{% endblock %}

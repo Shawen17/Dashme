@@ -1,0 +1,53 @@
+{% extends 'givers/base.html'  %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+{% include 'givers/message.html' %}
+<div class="account">
+
+    <div class="container crt">
+        <div class="ani-body">
+            <p class="p">Thanks for giving</p>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+            <form style="max-width: 50rem;padding: 50px;" method ='POST',action="{% url 'creategift' %}">
+                <h1>Details</h1>
+
+                <div class="form-row mt-4">
+                    <div class="form-group col-6 col-md-6 mb-0">
+                        {{ form1.phone_number|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-6 col-md-6 mb-0">
+                        {{ form1.category|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6 col-md-6 mb-0">
+                        {{ form1.nature|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-6 col-md-6 mb-0">
+                        {{ form1.quantity|as_crispy_field }}
+                    </div>
+                </div>
+                {{ form1.address|as_crispy_field }}
+                {% csrf_token %}
+                <button class="button button1" id='button-pop'  type='submit' style='background-color:aqua;margin: 8px;'>Gift</button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock %}
