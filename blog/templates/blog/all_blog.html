@@ -1,4 +1,4 @@
-{% extends 'givers/base_blog_genre.html' %} 
+{% extends 'givers/base_blog_genre.html' %}
 
 
 {% load static %}
@@ -8,7 +8,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Giveaway Blog</title>
+    <title>Dashme Blog</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" />
     <link rel="stylesheet" href="{% static 'givers/css/all.min.css' %}"/>
@@ -29,14 +29,14 @@ https://templatemo.com/tm-534-parallo
 <ul>
     <li style="text-align: left;">
 
-        <a href = "{% url 'blog:detail' i.id %}"><h4 style="color: white;">{{ i.title|upper }}</h4></a> 
-        <h4 style="color: white;">{{ i.date|date:'d M Y'|upper }}</h4> 
+        <a href = "{% url 'blog:detail' i.id %}"><h4 style="color: white;">{{ i.title|upper }}</h4></a>
+        <h4 style="color: white;">{{ i.date|date:'d M Y'|upper }}</h4>
         <p style="color: white;">{{ i.genre }}</p>
         <p style="color: white;">{{ i.story|safe|truncatechars:50 }}</p> <br>
         <hr>
     </li>
 </ul>
-{% endfor  %} 
+{% endfor  %}
 <div class="row">
     <div class="col-md-5"></div>
     <div class="col-md-2">

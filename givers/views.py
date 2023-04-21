@@ -1,20 +1,17 @@
-from django.forms import utils
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm,GiveForm,ContactUsForm,Profileform,SendEmailForm,GiveawayForm,TransactionForm
+from .forms import SignupForm,ContactUsForm,Profileform,SendEmailForm,GiveawayForm,TransactionForm
 from .models import Profile,Give,Transaction,Charge,Response,OnDeliveryTransaction,State,DestinationCharge,GiveawayCap,ShoppingCart
 from django.http import HttpResponse
-import random
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail,BadHeaderError
 from django.conf import settings
 from django.contrib.auth.forms import PasswordResetForm
-from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
@@ -22,10 +19,10 @@ from django.utils.encoding import force_bytes
 from django.core.mail import EmailMultiAlternatives
 from django import template
 from django.contrib.auth import get_user_model
-from django.contrib.sites.shortcuts import get_current_site
 import requests
 from datetime import timedelta
 from .fields import final_checkout
+from itertools import chain
 
 
 
@@ -85,7 +82,7 @@ def reply_contact(request):
                         'comment':comment,
                         'replied_by':request.user.username
                     }
-                    response=Response.objects.create(**data)
+                    Response.objects.create(**data)
 
             msg=EmailMultiAlternatives('Giveawaynow',form.cleaned_data.get('comment'),settings.EMAIL_HOST_USER,bcc=shape)
             msg.send()
@@ -130,7 +127,7 @@ def signupuser(request):
                         messages.error(request,'invalid phone number')
                         return redirect('signupuser')
                     user.save()
-                    current_site = get_current_site(request)
+
                     subject = 'Activate your account.'
                     plaintext = template.loader.get_template('password/acc_activate_email.txt')
                     htmltemp = template.loader.get_template('password/acc_activate_email.html')
@@ -243,7 +240,9 @@ def user_account(request):
     else:
         fit=False
 
-    orders= Transaction.objects.filter(made_by=str(user),verified=True)
+    online_payment= Transaction.objects.filter(made_by=str(user),verified=True)
+    ondelivery_payment=OnDeliveryTransaction.objects.filter(made_by=str(user))
+    orders=sorted(chain(online_payment,ondelivery_payment),key=lambda order: order.made_on, reverse=True)
     picks= Give.objects.filter(Q(gift_recipient=user.profile.email) & Q(gift_status='requested'))
     cart_items=picks.count
 
@@ -276,7 +275,7 @@ def report(request):
             amount=sum(amt,2000)
     offered =  Give.objects.filter(user=user)
     picks= Give.objects.filter(gift_recipient=user,date_requested__isnull=False)
-    return render(request,'givers/report.html',{'picks':picks,'form':VendorForm(),'amount':amount,'offered':offered})
+    return render(request,'givers/report.html',{'picks':picks,'amount':amount,'offered':offered})
 
 
 
@@ -320,7 +319,7 @@ def loginuser(request):
 
 
 def creategift(request):
-    user=request.user
+
     if request.method == 'GET':
         return render(request,'givers/creategiving.html',{'form1':GiveawayForm()})
 
