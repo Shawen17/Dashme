@@ -41,6 +41,7 @@ urlpatterns = [
     path('on-delivery/',views.on_delivery_payment,name='on_delivery'),
     path('add/',views.creategift,name='creategift'),
     path('giveaway/',views.giveaway, name='giveaway'),
+    path('giveaway/category/<str:category>',views.giveaway_category, name='giveaway_category'),
     path('gift/checkout',views.checkout,name='checkout'),
     path('gift/delivery',views.delivery_options, name='delivery_options'),
     path('gifts/<int:gift_id>/view',views.viewgift, name='viewgift'),

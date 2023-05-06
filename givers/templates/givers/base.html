@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600"/>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="{% static 'givers/css/base.css' %}"/>
     <link rel="icon" type="image/png"  href="{% static 'givers/img/G.png' %}"/>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1308985375007946"
@@ -131,63 +132,68 @@
 </head>
 <body>
 
+
 <div style='position:relative;margin-bottom:70px'>
-    <nav class="navbar navbar-expand-md navbar-light" style='position:fixed;z-index:9;top:0;right:0;left:0;background-color:whitesmoke'>
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'givers/img/G.png' %}" width="30" height="30" class="d-inline-block align-top">
-               <span style="color: teal;font-weight: 500;">Dashme</span>
-            </a>
-            <a class="navbar-brand" href="{% url 'blog:all_blogs' %}" target="_blank"><span style="color: rgb(16, 196, 202);">Blog</span></a>
-            <button  style="color:teal" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div style="display: flex;align-items: center;justify-content: center;">
-              <button type="button" style="border: none;background-color: transparent;"><a href="{% url 'user_account' %}" ><i  class="fal fa-shopping-cart"></i><span id="cart" class="badge badge-info">{% if cartItem %}{{cartItem}}{% endif %}</span></a></button>
+    <div  style='position:fixed;z-index:9;top:0;right:0;left:0'>
+        <nav class="navbar navbar-expand-md navbar-light" style='background-color:whitesmoke' >
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'givers/img/G.png' %}" width="30" height="30" class="d-inline-block align-top">
+                   <span style="color: teal;font-weight: 500;">Dashme</span>
+                </a>
+
+                <a class="navbar-brand" href="{% url 'blog:all_blogs' %}" target="_blank"><span style="color: rgb(16, 196, 202);">Blog</span></a>
+                <button  style="color:teal" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div style="display: flex;align-items: center;justify-content: center;">
+                  <button type="button" style="border: none;background-color: transparent;"><a href="{% url 'user_account' %}" ><i  class="fal fa-shopping-cart"></i><span id="cart" class="badge badge-info">{% if cartItem %}{{cartItem}}{% endif %}</span></a></button>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item {{ creategift }}">
+                        <a style="color: teal;" class="nav-link" href="{% url 'creategift' %}">Offer gift</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'giveaway' %}" style="color: teal;" class="nav-link">Gifts</a>
+                      </li>
+                      {% if user.is_authenticated %}
+
+                        <li class="nav-item {{ user_account }}">
+                            <a  style="color: teal;" class="nav-link" href="{% url 'user_account' %}">dashboard</a>
+                        </li>
+
+                      {% endif %}
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item {{ edit_profile }}">
+                            <a  style="color: teal;" class='nav-link' href="{% url 'account_update' %}" >Update Profile</a>
+                        </li>
+
+                        <li class="nav-item">
+                                <a href="{% url 'logoutuser' %}"  style="color: teal;"  class="nav-link">Logout</a>
+                        </li>
+
+                        {% else %}
+                        <li class="nav-item">
+                            <a style="color: teal;" class="nav-link" href="{% url 'signupuser' %}">SignUp</a>
+                        </li>
+                        <li class="nav-item" style="color:white;">
+                            <a style="color: teal;" class="nav-link" href="{% url 'loginuser' %}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
             </div>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mr-auto">
-                  <li class="nav-item {{ creategift }}">
-                    <a style="color: teal;" class="nav-link" href="{% url 'creategift' %}">Offer gift</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{% url 'giveaway' %}" style="color: teal;" class="nav-link">Gifts</a>
-                  </li>
-                  {% if user.is_authenticated %}
 
-                    <li class="nav-item {{ user_account }}">
-                        <a  style="color: teal;" class="nav-link" href="{% url 'user_account' %}">dashboard</a>
-                    </li>
+        </nav>
 
-                  {% endif %}
-                </ul>
+    </div>
 
-                <ul class="navbar-nav ml-auto">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item {{ edit_profile }}">
-                        <a  style="color: teal;" class='nav-link' href="{% url 'account_update' %}" >Update Profile</a>
-                    </li>
-
-                    <li class="nav-item">
-                            <a href="{% url 'logoutuser' %}"  style="color: teal;"  class="nav-link">Logout</a>
-                    </li>
-
-                    {% else %}
-                    <li class="nav-item">
-                        <a style="color: teal;" class="nav-link" href="{% url 'signupuser' %}">SignUp</a>
-                    </li>
-                    <li class="nav-item" style="color:white;">
-                        <a style="color: teal;" class="nav-link" href="{% url 'loginuser' %}">Login</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-
-        </div>
-
-    </nav>
 </div>
-
         {% block content %}{% endblock %}
 
 
@@ -224,6 +230,7 @@
       });
     });
 </script>
+
 
 </body>
 <div  style="background-color:teal">

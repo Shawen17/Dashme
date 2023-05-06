@@ -84,7 +84,7 @@ def reply_contact(request):
                     }
                     Response.objects.create(**data)
 
-            msg=EmailMultiAlternatives('Giveawaynow',form.cleaned_data.get('comment'),settings.EMAIL_HOST_USER,bcc=shape)
+            msg=EmailMultiAlternatives('Dashme',form.cleaned_data.get('comment'),settings.EMAIL_HOST_USER,bcc=shape)
             msg.send()
             messages.success(request,'reply sent')
             del request.session['selected']
@@ -133,8 +133,8 @@ def signupuser(request):
                     htmltemp = template.loader.get_template('password/acc_activate_email.html')
                     c = {
 					"email":user.profile.email,
-					'domain':'www.giveawaynow.com.ng',
-					'site_name': 'Giveawaynow',
+					'domain':'www.dashme.ng',
+					'site_name': 'Dashme',
 					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
 					"user": user,
 					'token': default_token_generator.make_token(user),
@@ -176,7 +176,7 @@ def contact(request):
         if form.is_valid():
             form.save()
             email=form.cleaned_data.get('email')
-            subject = "Giveawaynow"
+            subject = "Dashme"
             plaintext = template.loader.get_template('password/contact_response.txt')
             htmltemp = template.loader.get_template('password/contact_response.html')
             c={
@@ -359,6 +359,64 @@ def giveaway(request):
     return render(request,'givers/giftpage.html',{'page_obj':page_obj,'user':user,'gift1':gift1,'cartItem':cartItem})
 
 
+def giveaway_category(request,category):
+    user=request.user
+    if user.is_anonymous:
+        cartItem=''
+    else:
+        cartItem=Give.objects.filter(gift_recipient=user.profile.email, gift_status='requested').count
+
+    gift1= Give.objects.latest('date_posted')
+
+    house_category=['furniture','kitchen','groceries']
+    electronics_category=['electronics','mobile','laptop']
+    toy_category=['toys','bicycle']
+
+    female_items=Give.objects.filter(Q(date_requested__isnull = True)&Q(gender='female'))
+    male_items=Give.objects.filter(Q(date_requested__isnull = True)&Q(gender='male'))
+
+
+    if category=='female shoes':
+        gifts = female_items.filter(category='shoes').order_by('-date_posted')
+    elif category=='female bags':
+        gifts = female_items.filter(category='bag').order_by('-date_posted')
+    elif category=='female clothes':
+        gifts = female_items.filter(category='clothes').order_by('-date_posted')
+    elif category=='female corporate':
+        gifts = female_items.filter(category='corporate').order_by('-date_posted')
+    elif category=='female accessories':
+        gifts = female_items.filter(category='accessories').order_by('-date_posted')
+    elif category=='beauty':
+        gifts = female_items.filter(category='beauty').order_by('-date_posted')
+    elif category=='male clothes':
+        gifts=male_items.filter(category='clothes').order_by('-date_posted')
+    elif category=='male corporate':
+        gifts=male_items.filter(category='corporate').order_by('-date_posted')
+    elif category=='male shoes':
+        gifts=male_items.filter(category='shoes').order_by('-date_posted')
+    elif category=='male natives':
+        gifts=male_items.filter(category='natives').order_by('-date_posted')
+    elif category=='toys':
+        gifts = Give.objects.filter(Q(date_requested__isnull = True)&Q(category__in=toy_category)).order_by('-date_posted')
+    elif category=='books':
+        gifts = Give.objects.filter(Q(date_requested__isnull = True)&Q(category='book')).order_by('-date_posted')
+    elif category=='electronics':
+        gifts = Give.objects.filter(Q(date_requested__isnull = True)&Q(category__in=electronics_category)).order_by('-date_posted')
+    elif category=='household-items':
+        gifts = Give.objects.filter(Q(date_requested__isnull = True)&Q(category__in=house_category)).order_by('-date_posted')
+    else:
+        gifts=  Give.objects.filter(date_requested__isnull = True).order_by('-date_posted')
+    p=Paginator(gifts,60)
+    page_number=request.GET.get('page')
+    try:
+        page_obj=p.get_page(page_number)
+    except PageNotAnInteger:
+        page_obj=p.page(1)
+    except EmptyPage:
+        page_obj=p.page(p.num_pages)
+    return render(request,'givers/giftpage.html',{'page_obj':page_obj,'user':user,'gift1':gift1,'cartItem':cartItem})
+
+
 
 def viewgift(request,gift_id):
     user=request.user
@@ -510,8 +568,8 @@ def password_reset_request(request):
 					htmltemp = template.loader.get_template('password/password_reset_email.html')
 					c = {
 					"email":user.email,
-					'domain':'www.giveawaynow.com.ng',
-					'site_name': 'Giveawaynow',
+					'domain':'www.dashme.ng',
+					'site_name': 'Dashme',
 					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
 					"user": user,
 					'token': default_token_generator.make_token(user),
@@ -627,7 +685,7 @@ def on_delivery_payment(request):
     }
     text_content = plaintext.render(c)
 
-    subject = "Giveawaynow invoice"
+    subject = "Dashme invoice"
     msg = text_content
     to = request.user.email
     send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
