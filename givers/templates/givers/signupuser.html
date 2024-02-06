@@ -12,7 +12,7 @@
 
     <br>
     <div class="row d-flex justify-content-center">
-    <form class="form-width" style="max-width: 70rem;border:slategray 2px solid;padding: 50px;border-radius: 10px;background-color: white;"  , method ='POST',action="{% url 'signupuser' %}">
+    <form class="form-width" method ='POST',action="{% url 'signupuser' %}">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-6 col-md-6 mb-0">

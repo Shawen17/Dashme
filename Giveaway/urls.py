@@ -14,12 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include,register_converter
+from django.urls import path,include
 from  django.conf import settings
 from django.conf.urls.static import static
 from givers import views
-from django.conf.urls import url
-from django.views.static import serve
 from django.contrib.auth import views as auth_views
 
 
@@ -41,12 +39,12 @@ urlpatterns = [
     path('on-delivery/',views.on_delivery_payment,name='on_delivery'),
     path('add/',views.creategift,name='creategift'),
     path('giveaway/',views.giveaway, name='giveaway'),
-    path('giveaway/category/<str:category>',views.giveaway_category, name='giveaway_category'),
+    path('giveaway/category/<str:category>/',views.giveaway_category, name='giveaway_category'),
     path('gift/checkout',views.checkout,name='checkout'),
     path('gift/delivery',views.delivery_options, name='delivery_options'),
     path('gifts/<int:gift_id>/view',views.viewgift, name='viewgift'),
     path('profile/edit', views.edit_profile, name='account_update'),
-    path('product/<str:category>',views.product_category, name='product_category'),
+    path('product/<str:category>/',views.product_category, name='product_category'),
     path('gift/premium',views.product_class,name='product_class'),
     path('pick/<int:gift_id>/gift',views.add_to_cart, name='selectgift'),
     path('return/<int:gift_id>/picked',views.returnpicked, name='returnpicked'),

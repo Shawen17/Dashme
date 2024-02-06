@@ -3,28 +3,43 @@
 {% load static %}
 
 {% block content %}
-<div class="content-wrapper">
+<div class="about-container ">
+    <div class="about-title">Learn About Us</div>
+    <div class="about-vid">
+        <video style="border-radius:6px" width="450" height="400" controls >
+          <source src="{% static 'givers/vid/Ad.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="about-wrapper">
+        <div class="about-desc">
+            Dashme from the name is a concept of giving out things you have outgrown or are no longer fashionable to you. In every society there will always be two ends, a giver and a receiver and a giver who might be receiver at one point too.
+            dashme has been created as a platform for givers and receivers to meet. AS an example we have people relocating and have some few good stuffs that might not neccesarily be sellable but will be of good use to somebody out there who needs them.
+        </div>
+        <div class="img-con">
+            <img style="border-radius:6px" src="{% static  'givers/img/donation2.jpg' %}" alt="donors" height="80%" width="80%"/>
 
-    <div class="page-section" id="about">
+        </div>
+    </div>
+    <div class="about-wrapper">
+        <div class="img-con">
+            <img style="border-radius:6px" src="{% static  'givers/img/donation1.jpg' %}" alt="donors" height="80%" width="80%"/>
 
-            <h4 class="widget-title" style="padding-left:20px;text-decoration: underline teal;">Learn About Us</h4>
+        </div>
 
-             <div style="padding:4px">
-                <p><b>Dashme</b> from the name is a concept of giving out things you have outgrown or are no longer fashionable to you. In every society there will always be two ends, a giver and a receiver and a giver who might be receiver at one point too.
-                    dashme has been created as a platform for givers and receivers to meet. AS an example we have people relocating and have some few good stuffs that might not neccesarily be sellable but will be of good use to somebody out there who needs them.
-                </p>
-                <hr>
-                <p>
-                    Any item of choice ranging from groceries,beauty products, clothes and furnitures will always be valuable to someone no matter how out of style they seem to you so far they are still
-                    in good condition. We all know how tough the country is, so being a helping hand with things you longer need won't be a bad idea and we are here to facilitate that.
-                    <b>At Dashme, we value your gifts and we are greatful that you will be putting a smile on someone's face.</b>
-                </p>
-                <br>
-                <p>
-                    If you have any huge(out of the ordinary) item you want to give to any lucky person,
-                    kindly <a style="color:blue"  href="{% url 'contact' %}">contact us </a> and we will make it known unless you want to remain anonymous.
-                </p>
-            </div>
+        <div class="about-desc mb5">
+            Any item of choice ranging from groceries,beauty products, clothes and furnitures will always be valuable to someone no matter how out of style they seem to you so far they are still
+             in good condition. We all know how tough the country is, so being a helping hand with things you longer need won't be a bad idea and we are here to facilitate that.
+            At Dashme, we value your gifts and we are greatful that you will be putting a smile on someone's face.
+        </div>
+
+    </div>
+    <div id="about-lw">
+        <div style="text-align:center;word-break:break-word;width:70%">
+        If you have lots of items to give out,
+         kindly <a style="color:blue"  href="{% url 'contact' %}">contact us </a> and we will arrange to pick them up.
+        </div>
+
     </div>
 </div>
 

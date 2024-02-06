@@ -23,6 +23,8 @@ import requests
 from datetime import timedelta
 from .fields import final_checkout
 from itertools import chain
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 
@@ -97,7 +99,6 @@ def signupuser(request):
 
     if request.method == 'POST':
         form = SignupForm()
-        state=request.POST['state']
         username = request.POST['username']
         email = request.POST['email']
         password1 = request.POST['password1']
@@ -128,33 +129,30 @@ def signupuser(request):
                         return redirect('signupuser')
                     user.save()
 
-                    subject = 'Activate your account.'
-                    plaintext = template.loader.get_template('password/acc_activate_email.txt')
-                    htmltemp = template.loader.get_template('password/acc_activate_email.html')
-                    c = {
-					"email":user.profile.email,
-					'domain':'www.dashme.ng',
-					'site_name': 'Dashme',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'https',
-					}
-                    text_content = plaintext.render(c)
-                    html_content = htmltemp.render(c)
-                    try:
-                        msg = EmailMultiAlternatives(subject, text_content,settings.EMAIL_HOST_USER, [user.profile.email], headers = {'Reply-To': settings.EMAIL_HOST_USER})
-                        msg.attach_alternative(html_content, "text/html")
-                        msg.send()
-                    except BadHeaderError:
-                        return HttpResponse('Invalid header found.')
-                    messages.info(request, "A verification mail has been sent to your email, kindly complete registration from there. ")
-                    return redirect ("home")
-                    '''username = form.cleaned_data.get('username')
-                    password = form.cleaned_data.get('password1')
-                    user= authenticate(username=username,password=password)
-                    login(request,user)
-                    return redirect('account_update')'''
+    #                 subject = 'Activate your account.'
+    #                 plaintext = template.loader.get_template('password/acc_activate_email.txt')
+    #                 htmltemp = template.loader.get_template('password/acc_activate_email.html')
+    #                 c = {
+				# 	"email":user.profile.email,
+				# 	'domain':'www.dashme.ng',
+				# 	'site_name': 'Dashme',
+				# 	"uid": urlsafe_base64_encode(force_bytes(user.pk)),
+				# 	"user": user,
+				# 	'token': default_token_generator.make_token(user),
+				# 	'protocol': 'https',
+				# 	}
+    #                 text_content = plaintext.render(c)
+    #                 html_content = htmltemp.render(c)
+    #                 try:
+    #                     print(f"Connecting to SMTP server: {settings.EMAIL_HOST_USER}:{settings.EMAIL_PORT}")
+    #                     msg = EmailMultiAlternatives(subject, text_content,settings.EMAIL_HOST_USER, [user.profile.email], headers = {'Reply-To': settings.EMAIL_HOST_USER})
+    #                     msg.attach_alternative(html_content, "text/html")
+    #                     msg.send()
+    #                 except BadHeaderError:
+    #                     return HttpResponse('Invalid header found.')
+                    messages.info(request, "Welcome! You can now login")
+                    return redirect ("loginuser")
+
                 else:
                     form = SignupForm()
                     messages.error(request,'form is invalid')
@@ -222,6 +220,10 @@ def product_category(request,category):
 
     p=Paginator(product,20)
     page_number=request.GET.get('page')
+    request.session['pageNumber']=page_number
+    request.session['category']=category
+    if request.session.get('productCategory'):
+        del request.session['productCategory']
     try:
         page_obj=p.get_page(page_number)
     except PageNotAnInteger:
@@ -312,7 +314,16 @@ def loginuser(request):
                 login(request,user)
                 if request.session.get('first_login'):
                     return redirect('account_update')
-                return redirect('giveaway')
+                page_number=request.session.get('pageNumber')
+                if request.session.get('category'):
+                    category=request.session.get('category')
+                    return HttpResponseRedirect(reverse('product_category',kwargs={'category': category}) + f'?page={page_number}')
+                if request.session.get('productCategory'):
+                    category=request.session.get('productCategory')
+                    return HttpResponseRedirect(reverse('giveaway_category',kwargs={'category': category}) + f'?page={page_number}')
+
+                return HttpResponseRedirect(reverse('giveaway') + f'?page={page_number}')
+
             messages.error(request, 'Invalid reCAPTCHA. Please try again.')
             return redirect('loginuser')
 
@@ -350,6 +361,12 @@ def giveaway(request):
         gifts=  Give.objects.filter(date_requested__isnull = True).order_by('-date_posted')
     p=Paginator(gifts,60)
     page_number=request.GET.get('page')
+    request.session['pageNumber']=page_number
+
+    if request.session.get('category'):
+        del request.session['category']
+    if request.session.get('productCategory'):
+        del request.session['productCategory']
     try:
         page_obj=p.get_page(page_number)
     except PageNotAnInteger:
@@ -367,7 +384,8 @@ def giveaway_category(request,category):
         cartItem=Give.objects.filter(gift_recipient=user.profile.email, gift_status='requested').count
 
     gift1= Give.objects.latest('date_posted')
-
+    if request.session.get('category'):
+        del request.session['category']
     house_category=['furniture','kitchen','groceries']
     electronics_category=['electronics','mobile','laptop']
     toy_category=['toys','bicycle']
@@ -408,6 +426,8 @@ def giveaway_category(request,category):
         gifts=  Give.objects.filter(date_requested__isnull = True).order_by('-date_posted')
     p=Paginator(gifts,60)
     page_number=request.GET.get('page')
+    request.session['pageNumber']=page_number
+    request.session['productCategory']=category
     try:
         page_obj=p.get_page(page_number)
     except PageNotAnInteger:
@@ -460,6 +480,7 @@ def add_to_cart(request,gift_id):
     picked_within_a_month=Give.objects.filter(gift_recipient=user.profile.email,date_requested__isnull=False,date_requested__range=[month_ago,current_time]).count()
     day_cap=GiveawayCap.objects.get(name='days')
     month_cap=GiveawayCap.objects.get(name='month')
+    page_number=request.session.get('pageNumber')
 
     if request.method=='POST':
         if pick.state == user.profile.state:
@@ -473,7 +494,8 @@ def add_to_cart(request,gift_id):
                                 count+=1
                         if count>=1:
                             messages.error(request,'only one premium item per order')
-                            return redirect('giveaway')
+                            # return redirect('giveaway')
+                            return HttpResponseRedirect(reverse('giveaway') + f'?page={page_number}')
 
                 pick.date_requested=timezone.now()
                 pick.gift_recipient=user.profile.email
@@ -488,11 +510,13 @@ def add_to_cart(request,gift_id):
 
             else:
                 messages.error(request,'you have already picked 4 gifts within 3days')
-                return redirect('giveaway')
+                # return redirect('giveaway')
+                return HttpResponseRedirect(reverse('giveaway')+ f'?page={page_number}')
         else:
                 messages.info(request,f'gift only available in {pick.state}')
 
-    return redirect('giveaway')
+    # return redirect('giveaway')
+    return HttpResponseRedirect(reverse('giveaway')+ f'?page={page_number}')
 
 
 
@@ -520,7 +544,7 @@ def returnpicked(request,gift_id):
         view.gift_recipient=''
         view.gift_status='unpicked'
         view.save(update_fields=['date_requested','gift_recipient','gift_status'])
-        ShoppingCart.objects.get(shopper=user.profile.email,product=view).delete()
+        ShoppingCart.objects.get(shopper=user.profile.email,product=view,status='in-cart').delete()
     return redirect('user_account')
 
 
@@ -541,6 +565,7 @@ def checkout(request):
 
     delivery=destination.charge
     request.session['delivery']=delivery
+    request.session['zone']=destination.zone
     service=Charge.objects.get(name='standard')
     service_charge=service.charge
     amount=delivery+service_charge
@@ -612,10 +637,11 @@ def activate(request, uidb64, token):
 def initiate_payment(request):
     cost=request.session.get('delivery')
     delivery_address=request.session.get('address')
+    zone=request.session.get('zone')
     contact=request.session.get('contact')
     user = request.user
     trans=Transaction()
-    a,b,c=final_checkout(trans,user,cost,delivery_address,contact)
+    a,b,c=final_checkout(trans,user,cost,delivery_address,contact,zone)
     total=a['amount']
     paystack_charge=b
     service_charge=c
@@ -647,13 +673,13 @@ def my_mail(request):
     shape=request.session.get('selected')
     if request.method=='POST':
         form=SendEmailForm(request.POST)
-        if form.is_valid:
-            form.save(commit=False)
-
-        msg=EmailMultiAlternatives('Dashme',form.cleaned_data.get('comment'),settings.EMAIL_HOST_USER,bcc=shape)
-        msg.send()
-    messages.success(request,'message sent')
-    del request.session['selected']
+        if form.is_valid():
+            email_instance = form.save(commit=False)
+            print(email_instance.comment)
+            msg=EmailMultiAlternatives('Dashme',email_instance.comment,settings.EMAIL_HOST_USER,bcc=shape)
+            msg.send()
+            messages.success(request,'message sent')
+            del request.session['selected']
 
     return redirect('/admin/givers/profile')
 
@@ -662,10 +688,11 @@ def my_mail(request):
 def on_delivery_payment(request):
     user=request.user
     cost=request.session.get('delivery')
+    zone=request.session.get('zone')
     delivery_address=request.session.get('address')
     contact=request.session.get('contact')
     trans=OnDeliveryTransaction()
-    a,c=final_checkout(trans,user,cost,delivery_address,contact)
+    a,c=final_checkout(trans,user,cost,delivery_address,contact,zone)
     amount=a['amount']
 
     OnDeliveryTransaction.objects.create(**a)

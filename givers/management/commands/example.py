@@ -12,6 +12,6 @@ class Command(BaseCommand):
 
         a=timezone.now()
 
-        Give.objects.filter(date_requested__lte=a+timedelta(minutes=20),gift_status='requested').update(date_requested=None,gift_recipient='',gift_status='unpicked')
+        Give.objects.filter(date_requested__lte=a-timedelta(minutes=20),gift_status='requested').update(date_requested=None,gift_recipient='',gift_status='unpicked')
 
-        ShoppingCart.objects.filter(status='in-cart',updated__lte=a+timedelta(minutes=20)).delete()
+        ShoppingCart.objects.filter(status='in-cart',updated__lte=a-timedelta(minutes=20)).delete()

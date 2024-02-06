@@ -35,7 +35,7 @@ class GroupedModelChoiceField(ModelChoiceField):
 
 
 
-def final_checkout(Model,account_owner,cost,delivery_address,contact):
+def final_checkout(Model,account_owner,cost,delivery_address,contact,zone):
 
     service_charge=Charge.objects.get(name='standard').charge
     #change gift_recipient=user.email
@@ -61,7 +61,8 @@ def final_checkout(Model,account_owner,cost,delivery_address,contact):
         'items':item,
         'amount':paid_delivery_total,
         'delivery_address':delivery_address,
-        'contact': str(contact)
+        'contact': str(contact),
+        'zone':zone
         }
         return data,paystack_charge,service_charge
     elif isinstance(Model,OnDeliveryTransaction):
@@ -76,6 +77,7 @@ def final_checkout(Model,account_owner,cost,delivery_address,contact):
         'contact':str(contact),
         'amount':ondelivery_total+vat,
         'delivery_address':delivery_address,
+        'zone':zone
         }
         return data,service_charge
 

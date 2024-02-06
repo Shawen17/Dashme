@@ -15,7 +15,7 @@
 <br>
 <br>
 <div class="row d-flex justify-content-center" style="padding-top: 30px;">
-<form style="max-width: 70em;border:slategray 2px solid;padding: 50px;border-radius: 15px;background-color: white;"  method ='POST' action="{% url 'contact' %}">
+<form class="form-width"  method ='POST' action="{% url 'contact' %}">
     {% csrf_token %}
     {{ form.email|as_crispy_field }}
     <div class="form-row">

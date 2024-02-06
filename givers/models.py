@@ -1,16 +1,13 @@
 from django.db import models
-from django import dispatch
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import os
 import pandas as pd
 from Giveaway.settings import STATIC_ROOT
-from django.utils import timezone
 from django_resized import ResizedImageField
 from .paystack import PayStack
 import secrets
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 import random
 
@@ -92,6 +89,19 @@ product_level=(
 cart_choices=(
     ('in-cart','in-cart'),
     ('ordered','ordered')
+)
+
+zones=(
+    ('',''),
+    ('island zone A','island zone A'),
+    ('island zone B','island zone B'),
+    ('island zone B2','island zone B2'),
+    ('mainland zone A','mainland zone A'),
+    ('mainland zone B','mainland zone B'),
+    ('mainland zone C','mainland zone C'),
+    ('mainland zone D','mainland zone D'),
+    ('mainland zone E','mainland zone E'),
+    ('mainland zone E2','mainland zone E2'),
 )
 
 
@@ -194,31 +204,6 @@ class Received(models.Model):
     date_received = models.DateTimeField(auto_now_add=True)
 
 
-# class Vendor(models.Model):
-#     give = models.OneToOneField(Give,on_delete=models.CASCADE,related_name='gift')
-#     ticket = models.CharField(max_length=10,blank=True,default='')
-#     image=models.ImageField(upload_to='givers/images/')
-#     state = models.CharField(max_length=50,choices=states,default='')
-#     description=models.CharField(max_length=100)
-#     request_date=models.DateTimeField(blank=True,null=True)
-#     category = models.CharField(max_length=100,choices=categories)
-#     giver_number=models.BigIntegerField(blank=True,null=True)
-#     address=models.TextField(default='')
-#     receiver_number=models.BigIntegerField(blank=True,null=True)
-#     delivery_address =models.TextField(max_length=200,blank=True,null=True)
-#     amount = models.IntegerField(blank=True,null=True)
-#     payment_status = models.CharField(max_length=30,choices=pay_status,default='unpaid')
-#     treated=models.BooleanField(default=False)
-
-#     def __str__(self):
-#         return self.give.description
-
-
-# @receiver(post_save,sender=Give,dispatch_uid='give.created')
-# def create_vendor_profile(sender,instance,created,**kwargs):
-#     if created:
-#         Vendor.objects.create(give=instance)
-#     instance.gift.save()
 
 
 class Transaction(models.Model):
@@ -233,6 +218,7 @@ class Transaction(models.Model):
     email=models.EmailField(default='')
     verified=models.BooleanField(default=False)
     delivered=models.BooleanField(default=False)
+    zone=models.CharField(max_length=50,blank=True,null=True)
 
     def __str__(self):
         return self.ref
@@ -277,12 +263,12 @@ class OnDeliveryTransaction(models.Model):
     items=models.CharField(max_length=200,default='',blank=True)
     amount = models.BigIntegerField()
     contact=contact=models.CharField(max_length=15,default='',blank=True)
-
     delivery_address=models.CharField(max_length=500,blank=True,null=True)
     ref = models.CharField( max_length=200,blank=True,null=True)
     email=models.EmailField(default='')
     delivered=models.BooleanField(default=False)
     settlement=models.BigIntegerField()
+    zone=models.CharField(max_length=50,blank=True,null=True)
 
     def __str__(self):
         return self.ref
@@ -308,6 +294,7 @@ class DestinationCharge(models.Model):
     state=models.ForeignKey(State,on_delete=models.SET_NULL, null=True,default=1)
     city=models.CharField(max_length=100)
     charge=models.IntegerField()
+    zone=models.CharField(max_length=50,choices=zones,default='',blank=True,null=True)
 
     def __str__(self):
         return self.city

@@ -5,7 +5,7 @@
 
 {% block content %}
 {% include 'givers/message.html' %}
-<div class='container'>
+<div class='container hm'>
 <h1 style='text-align: center;font-weight: bolder;'>Login here</h1>
 <h2 style='text-align: center;'>{{ error }}</h2>
 <br>
@@ -25,28 +25,28 @@
 </form>
 </div>
 
-<div class="separator">OR</div>
+<!--<div class="separator">OR</div>-->
 
 <div class="row d-flex justify-content-center">
 <div class="col-md-6 mx-auto social-container my-2 order-md-1">
-    <ul>
-        <!--<li>-->
+    <!--<ul>-->
+    <!--    <li>-->
 
-        <!--    <button id='ig-color' class="btn mb-2 social-text">-->
-        <!--        <i class="fab fa-instagram"></i><a href="#">Login with Instagram</a>-->
-        <!--    </button>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--    <button id='fb-color' class="btn mb-2 social-text">-->
-        <!--        <i class="fab fa-facebook-f"></i><a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>-->
-        <!--    </button>-->
-        <!--</li>-->
-        <li>
-            <button id='ld-color' class="btn mb-2 social-text">
-                <i class="fab fa-google fa-2x"></i><a href="{% provider_login_url 'google' %}">continue with Google</a>
-            </button>
-        </li>
-    </ul>
+    <!--        <button id='ig-color' class="btn mb-2 social-text">-->
+    <!--            <i class="fab fa-instagram"></i><a href="#">Login with Instagram</a>-->
+    <!--        </button>-->
+    <!--    </li>-->
+    <!--    <li>-->
+    <!--        <button id='fb-color' class="btn mb-2 social-text">-->
+    <!--            <i class="fab fa-facebook-f"></i><a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>-->
+    <!--        </button>-->
+    <!--    </li>-->
+    <!--    <li>-->
+    <!--        <button id='ld-color' class="btn mb-2 social-text">-->
+    <!--            <i class="fab fa-google fa-2x"></i><a href="{% provider_login_url 'google' %}">continue with Google</a>-->
+    <!--        </button>-->
+    <!--    </li>-->
+    <!--</ul>-->
 </div>
 </div>
 </div>

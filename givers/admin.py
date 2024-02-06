@@ -37,7 +37,9 @@ class GiveawayCapAdmin(ModelAdmin):
 
 @admin.register(DestinationCharge)
 class DestinationChargeAdmin(ModelAdmin):
-    list_display=('state','city','charge')
+    list_display=('state','city','charge','zone')
+    ordering =('zone',)
+    search_fields =('city','zone')
     actions=['export_rate']
 
     def export_rate(self,request,queryset):
@@ -58,15 +60,15 @@ class ChargeAdmin(ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(ModelAdmin):
-    list_display=('ref','email','made_by','made_on','items_id','items','delivery_address','contact','amount','verified','delivered')
-    ordering =('-made_on',)
+    list_display=('ref','email','made_by','made_on','items_id','items','delivery_address','zone','contact','amount','verified','delivered')
+    ordering =('-made_on','zone')
     search_fields =('ref','email')
     actions=['mark_delivered']
 
     def mark_delivered(self,request,queryset):
         queryset.update(delivered=True)
         for i in queryset:
-            gives=Give.objects.filter(id__in=i.items_id).update(gift_status='received',date_received=timezone.now())
+            Give.objects.filter(id__in=i.items_id).update(gift_status='received',date_received=timezone.now())
 
     mark_delivered.short_description = 'Mark as Delivered'
 
@@ -74,15 +76,15 @@ class TransactionAdmin(ModelAdmin):
 
 @admin.register(OnDeliveryTransaction)
 class OnDeliveryTransactionAdmin(ModelAdmin):
-    list_display=('ref','email','made_by','made_on','items_id','items','delivery_address','contact','amount','settlement','delivered',)
-    ordering =('-made_on',)
+    list_display=('ref','email','made_by','made_on','items_id','items','delivery_address','zone','contact','amount','settlement','delivered',)
+    ordering =('-made_on','zone')
     search_fields =('ref','email')
     actions=['mark_delivered','export_orders']
 
     def mark_delivered(self,request,queryset):
         queryset.update(delivered=True)
         for i in queryset:
-            gives=Give.objects.filter(id__in=i.items_id).update(gift_status='received',date_received=timezone.now())
+            Give.objects.filter(id__in=i.items_id).update(gift_status='received',date_received=timezone.now())
 
     def export_orders(self,request,queryset):
         response = HttpResponse(content_type='text/csv')

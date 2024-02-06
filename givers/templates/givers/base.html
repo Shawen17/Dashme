@@ -29,6 +29,14 @@
     margin: 0px;
     padding: 0px;
     overflow-x: hidden;}
+
+    #copyright-footer{
+        color:black;
+        font-size: 13px;
+        font-weight: 100;
+        font-family:monospace;
+    }
+
     #glow2 {
           font-weight: 700;
           text-align: center;
@@ -204,23 +212,31 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
 <script>
-    var form = document.getElementById('redeem-form');
-    var btn_appear = document.getElementById('btn-appear');
-    var btn_disappear =document.getElementById('btn-disappear');
-    var someval = document.getElementsByClassName('testvalues');
-    const newfile = new ActiveXObject("Scripting.FileSystemObject");
-    btn_appear.onclick= function(){
-        form.style.display = 'block';
-    }
-    btn_disappear.onclick = function(){
-        form.style.display = 'none';
-    }
-    window.onclick = function(event){
-        if (event.target == form){
+    document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById('redeem-form');
+        var btn_appear = document.getElementById('btn-appear');
+        var btn_disappear = document.getElementById('btn-disappear');
+
+
+        btn_appear.addEventListener('click', function () {
+            form.style.display = 'block';
+        });
+
+        btn_disappear.addEventListener('click', function () {
             form.style.display = 'none';
-        }
-    }
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target == form) {
+                form.style.display = 'none';
+            }
+        });
+
+
+    });
 </script>
 <script>
     //global grecaptcha
@@ -233,47 +249,53 @@
 
 
 </body>
-<div  style="background-color:teal">
 
-    <div class="row" style="background-color: teal;padding-top: 20px;">
+<div class="footer">
+
+    <div class="row">
         <div class="col-5 col-md-5">
-
-                <ul >
-                    <li class="foot-list" style="flex: left;"><b>Our Services</b></li>
-
-                    <li class="foot-list" style="flex: left;">
+            <ul >
+                <li class="foot-list" style="flex: left;"><b>Our Services</b></li>
+                <li class="foot-list" style="flex: left;">
                         <a class='a'  href="{% url 'contact' %}">Contact us</a>
-                    </li>
-                </ul>
+                </li>
+            </ul>
         </div>
         <div class="col-2 col-md-2"></div>
-
-
-            <div class="col-5 col-md-5">
-                 <ul >
-                    <li class="foot-list" style="flex: right;">
-                        <a class='a' href="{% url 'policy' %}">policy</a>
-                    </li>
-                    <li class="foot-list" style="flex: right;">
-                        <a class='a' href="{% url 'about' %}">about us</a>
-                    </li>
-                    <li class="foot-list" style="flex: right;">
-                        <a class='a' href="{% url 'operation' %}">how it works</a>
-                    </li>
-                </ul>
-            </div>
-        <div class="col-md-12 text-center">
-
-
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.instagram.com/giveawaynow234"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <p style="font-size: 13px;color:black;font-weight: 100;font-family:monospace;">Copyright 2023 Dashme</p>
+        <div class="col-5 col-md-5">
+            <ul >
+                <li class="foot-list" style="flex: right;">
+                    <a class='a' href="{% url 'policy' %}">policy</a>
+                </li>
+                <li class="foot-list" style="flex: right;">
+                    <a class='a' href="{% url 'about' %}">about us</a>
+                </li>
+                <li class="foot-list" style="flex: right;">
+                    <a class='a' href="{% url 'operation' %}">how it works</a>
+                </li>
+            </ul>
         </div>
+        <div class="col-md-12 text-center">
+            <a class="ft" href="#"><i class="fab fa-facebook-f"></i></a>
+            <a class="ft" href="#"><i class="fab fa-twitter"></i></a>
+            <aclass="ft" href="https://www.instagram.com/giveawaynow234"><i class="fab fa-instagram"></i></a>
+            <a class="ft" href="#"><i class="fab fa-youtube"></i></a>
+            <div id='copyright-footer'></div>
+
+        </div>
+
 
 
     </div>
+    <script>
+    var copyright = document.getElementById('copyright-footer');
+    window.addEventListener('load', function () {
+            const year = new Date().getFullYear();
+            if(copyright){
+               copyright.innerHTML = `Copyright ${year}  Dashme`;
+            }
+        });
+</script>
 </div>
 
 </html>
