@@ -1149,7 +1149,29 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    margin:15px;
+    padding:10px;
+  }
+
+.about-vid-size{
+    height:400px;
+    width:450px;
+}
+
+@media screen and (max-width: 568px){
+    .about-desc{
+    flex:100%;
+    font-size:16px;
+    padding:5px;
+}
+.img-con{
+    padding:5px;
+    flex:100%;
+}
+.about-vid-size{
+    height:380px;
+    width:400px;
+}
+
 }
 
 
