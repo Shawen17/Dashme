@@ -129,27 +129,27 @@ def signupuser(request):
                         return redirect('signupuser')
                     user.save()
 
-    #                 subject = 'Activate your account.'
-    #                 plaintext = template.loader.get_template('password/acc_activate_email.txt')
-    #                 htmltemp = template.loader.get_template('password/acc_activate_email.html')
-    #                 c = {
-				# 	"email":user.profile.email,
-				# 	'domain':'www.dashme.ng',
-				# 	'site_name': 'Dashme',
-				# 	"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-				# 	"user": user,
-				# 	'token': default_token_generator.make_token(user),
-				# 	'protocol': 'https',
-				# 	}
-    #                 text_content = plaintext.render(c)
-    #                 html_content = htmltemp.render(c)
-    #                 try:
-    #                     print(f"Connecting to SMTP server: {settings.EMAIL_HOST_USER}:{settings.EMAIL_PORT}")
-    #                     msg = EmailMultiAlternatives(subject, text_content,settings.EMAIL_HOST_USER, [user.profile.email], headers = {'Reply-To': settings.EMAIL_HOST_USER})
-    #                     msg.attach_alternative(html_content, "text/html")
-    #                     msg.send()
-    #                 except BadHeaderError:
-    #                     return HttpResponse('Invalid header found.')
+                    subject = 'Activate your account.'
+                    plaintext = template.loader.get_template('password/acc_activate_email.txt')
+                    htmltemp = template.loader.get_template('password/acc_activate_email.html')
+                    c = {
+				 	"email":user.profile.email,
+				 	'domain':'www.dashme.ng',
+				 	'site_name': 'Dashme',
+				 	"uid": urlsafe_base64_encode(force_bytes(user.pk)),
+				 	"user": user,
+				 	'token': default_token_generator.make_token(user),
+				 	'protocol': 'https',
+				 	}
+                    text_content = plaintext.render(c)
+                    html_content = htmltemp.render(c)
+                    try:
+                        print(f"Connecting to SMTP server: {settings.EMAIL_HOST_USER}:{settings.EMAIL_PORT}")
+                        msg = EmailMultiAlternatives(subject, text_content,settings.EMAIL_HOST_USER, [user.profile.email], headers = {'Reply-To': settings.EMAIL_HOST_USER})
+                        msg.attach_alternative(html_content, "text/html")
+                        msg.send()
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
                     messages.info(request, "Welcome! You can now login")
                     return redirect ("loginuser")
 
@@ -301,15 +301,15 @@ def loginuser(request):
         else:
 
             recaptcha_response = request.POST.get('g-recaptcha-response')
-            print(recaptcha_response)
+
             data = {
 			'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
 			'response': recaptcha_response,
 			}
             r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-            print(r)
+
             result = r.json()
-            print(result)
+
             if result['success']:
                 login(request,user)
                 if request.session.get('first_login'):
@@ -620,6 +620,7 @@ def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64)
         user = UserModel._default_manager.get(pk=uid)
+        print(user)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and default_token_generator.check_token(user, token):

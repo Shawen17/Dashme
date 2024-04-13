@@ -196,8 +196,8 @@ MESSAGE_TAGS = {
         messages.ERROR: 'alert-danger',
  }
 
-EMAIL_USE_SSL= False
-EMAIL_USE_TLS = True
+EMAIL_USE_SSL= True
+EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST_USER")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'mail.dashme.ng'
